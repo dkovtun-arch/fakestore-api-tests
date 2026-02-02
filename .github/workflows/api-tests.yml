@@ -37,14 +37,14 @@ jobs:
 
     - name: Generate Allure report for smoke
       if: always()
-      uses: simple-elf/allure-report-action@v1
+      uses: allure-framework/allure-action@v1
       with:
         allure_results: allure-results-smoke
         allure_report: allure-report-smoke
 
     - name: Generate Allure report for regression
       if: always()
-      uses: simple-elf/allure-report-action@v1
+      uses: allure-framework/allure-action@v1
       with:
         allure_results: allure-results-regression
         allure_report: allure-report-regression
