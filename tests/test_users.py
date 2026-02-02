@@ -1,5 +1,6 @@
 import pytest
 import requests
+import allure
 
 
 def validate_user_data(user):
@@ -16,6 +17,8 @@ def validate_user_data(user):
 
 
 @pytest.mark.smoke
+@allure.feature("Users API")
+@allure.story("Get all users")
 def test_get_all_users(base_url):
     """Test retrieving all users from Fake Store API"""
     response = requests.get(f"{base_url}/users")
@@ -31,6 +34,8 @@ def test_get_all_users(base_url):
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.parametrize("user_id", [1, 2, 3, 5])
+@allure.feature("Users API")
+@allure.story("Get single user")
 def test_get_single_user(base_url, user_id):
     """Test retrieving a single user"""
     response = requests.get(f"{base_url}/users/{user_id}")
@@ -41,6 +46,8 @@ def test_get_single_user(base_url, user_id):
 
 
 @pytest.mark.regression
+@allure.feature("Users API")
+@allure.story("Create user")
 def test_create_user(base_url):
     """Test creating a new user"""
     new_user = {
@@ -65,6 +72,8 @@ def test_create_user(base_url):
 
 
 @pytest.mark.regression
+@allure.feature("Users API")
+@allure.story("Update user")
 def test_update_user(base_url):
     """Test updating an existing user"""
     user_id = 1
@@ -90,6 +99,8 @@ def test_update_user(base_url):
 
 
 @pytest.mark.regression
+@allure.feature("Users API")
+@allure.story("Delete user")
 def test_delete_user(base_url):
     """Test deleting a user"""
     user_id = 1

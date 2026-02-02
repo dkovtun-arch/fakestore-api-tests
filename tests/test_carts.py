@@ -1,5 +1,6 @@
 import pytest
 import requests
+import allure
 
 
 def validate_cart_data(cart):
@@ -14,6 +15,8 @@ def validate_cart_data(cart):
 
 
 @pytest.mark.smoke
+@allure.feature("Carts API")
+@allure.story("Get all carts")
 def test_get_all_carts(base_url):
     """Test retrieving all carts from Fake Store API"""
     response = requests.get(f"{base_url}/carts")
@@ -29,6 +32,8 @@ def test_get_all_carts(base_url):
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.parametrize("cart_id", [1, 2, 3, 5])
+@allure.feature("Carts API")
+@allure.story("Get single cart")
 def test_get_single_cart(base_url, cart_id):
     """Test retrieving a single cart"""
     response = requests.get(f"{base_url}/carts/{cart_id}")
@@ -39,6 +44,8 @@ def test_get_single_cart(base_url, cart_id):
 
 
 @pytest.mark.regression
+@allure.feature("Carts API")
+@allure.story("Create cart")
 def test_create_cart(base_url):
     """Test creating a new cart"""
     new_cart = {
@@ -55,6 +62,8 @@ def test_create_cart(base_url):
 
 
 @pytest.mark.regression
+@allure.feature("Carts API")
+@allure.story("Update cart")
 def test_update_cart(base_url):
     """Test updating an existing cart"""
     cart_id = 1
@@ -71,6 +80,8 @@ def test_update_cart(base_url):
 
 
 @pytest.mark.regression
+@allure.feature("Carts API")
+@allure.story("Delete cart")
 def test_delete_cart(base_url):
     """Test deleting a cart"""
     cart_id = 1

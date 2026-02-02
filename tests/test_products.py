@@ -1,5 +1,6 @@
 import pytest
 import requests
+import allure
 
 
 def validate_product_data(product):
@@ -15,6 +16,8 @@ def validate_product_data(product):
 
 @pytest.mark.smoke
 @pytest.mark.regression
+@allure.feature("Products API")
+@allure.story("Get all products")
 def test_get_all_products(base_url):
     """Test retrieving all products from Fake Store API"""
     response = requests.get(f"{base_url}/products")
@@ -32,6 +35,8 @@ def test_get_all_products(base_url):
 
 
 @pytest.mark.regression
+@allure.feature("Products API")
+@allure.story("Get all products not empty")
 def test_get_all_products_not_empty(base_url):
     response = requests.get(f"{base_url}/products")
     products = response.json()
@@ -43,6 +48,8 @@ def test_get_all_products_not_empty(base_url):
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.parametrize("product_id", [1, 2, 3, 5, 10])
+@allure.feature("Products API")
+@allure.story("Get single product")
 def test_get_single_product(base_url, product_id):
     """Test retrieving a single product"""
     response = requests.get(f"{base_url}/products/{product_id}")
@@ -57,6 +64,8 @@ def test_get_single_product(base_url, product_id):
 
 
 @pytest.mark.smoke
+@allure.feature("Products API")
+@allure.story("Get product categories")
 def test_get_product_categories(base_url):
     """Test retrieving product categories"""
     response = requests.get(f"{base_url}/products/categories")
@@ -70,6 +79,8 @@ def test_get_product_categories(base_url):
 @pytest.mark.parametrize(
     "category", ["electronics", "jewelery", "men's clothing", "women's clothing"]
 )
+@allure.feature("Products API")
+@allure.story("Get products by category")
 def test_get_products_by_category(base_url, category):
     """Test retrieving products by category"""
     response = requests.get(f"{base_url}/products/category/{category}")
@@ -83,6 +94,8 @@ def test_get_products_by_category(base_url, category):
 
 
 @pytest.mark.regression
+@allure.feature("Products API")
+@allure.story("Last product in each category")
 def test_last_product_in_each_category(base_url):
     """Test that the last product in each category has the correct category"""
     # Get all categories
@@ -107,6 +120,8 @@ def test_last_product_in_each_category(base_url):
 
 @pytest.mark.regression
 @pytest.mark.parametrize("product_id", [9999, 0, -1])
+@allure.feature("Products API")
+@allure.story("Nonexistent product")
 def test_nonexistent_product(base_url, product_id):
     response = requests.get(f"{base_url}/products/{product_id}")
     assert (

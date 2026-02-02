@@ -25,12 +25,38 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest --tb=short
+        pytest --tb=short --html=report.html --self-contained-html
 
     - name: Run smoke tests
       run: |
-        pytest -m smoke --tb=short
+        pytest -m smoke --tb=short --html=smoke-report.html --self-contained-html --alluredir=allure-results-smoke
 
     - name: Run regression tests
       run: |
-        pytest -m regression --tb=short
+        pytest -m regression --tb=short --html=regression-report.html --self-contained-html --alluredir=allure-results-regression
+
+    - name: Generate Allure report for smoke
+      if: always()
+      uses: simple-elf/allure-report-action@v1
+      with:
+        allure_results: allure-results-smoke
+        allure_report: allure-report-smoke
+
+    - name: Generate Allure report for regression
+      if: always()
+      uses: simple-elf/allure-report-action@v1
+      with:
+        allure_results: allure-results-regression
+        allure_report: allure-report-regression
+
+    - name: Upload test reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: |
+          report.html
+          smoke-report.html
+          regression-report.html
+          allure-report-smoke/
+          allure-report-regression/
