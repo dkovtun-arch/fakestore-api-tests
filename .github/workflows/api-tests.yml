@@ -35,19 +35,26 @@ jobs:
       run: |
         pytest -m regression --tb=short --html=regression-report.html --self-contained-html --alluredir=allure-results-regression
 
+    - name: Install Allure CLI
+      run: |
+        wget -O allure.tgz https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz
+        tar -zxvf allure.tgz
+        sudo mv allure-2.24.0 /opt/allure
+        sudo ln -sf /opt/allure/bin/allure /usr/local/bin/allure
+
     - name: Generate Allure report for smoke
       if: always()
-      uses: allure-framework/allure-action@v1
-      with:
-        allure_results: allure-results-smoke
-        allure_report: allure-report-smoke
+      run: |
+        if [ -d "allure-results-smoke" ] && [ "$(ls -A allure-results-smoke)" ]; then
+          allure generate allure-results-smoke --clean --output allure-report-smoke
+        fi
 
     - name: Generate Allure report for regression
       if: always()
-      uses: allure-framework/allure-action@v1
-      with:
-        allure_results: allure-results-regression
-        allure_report: allure-report-regression
+      run: |
+        if [ -d "allure-results-regression" ] && [ "$(ls -A allure-results-regression)" ]; then
+          allure generate allure-results-regression --clean --output allure-report-regression
+        fi
 
     - name: Upload test reports
       if: always()
