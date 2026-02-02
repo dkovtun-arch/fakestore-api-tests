@@ -1,8 +1,6 @@
 import pytest
 import requests
 
-BASE_URL = "https://fakestoreapi.com"
-
 
 def validate_cart_data(cart):
     """Helper function to validate cart data types and required fields"""
@@ -15,9 +13,9 @@ def validate_cart_data(cart):
         assert isinstance(item["quantity"], int)
 
 
-def test_get_all_carts():
+def test_get_all_carts(base_url):
     """Test retrieving all carts from Fake Store API"""
-    response = requests.get(f"{BASE_URL}/carts")
+    response = requests.get(f"{base_url}/carts")
     assert response.status_code == 200
     carts = response.json()
     assert isinstance(carts, list)
@@ -28,23 +26,23 @@ def test_get_all_carts():
 
 
 @pytest.mark.parametrize("cart_id", [1, 2, 3, 5])
-def test_get_single_cart(cart_id):
+def test_get_single_cart(base_url, cart_id):
     """Test retrieving a single cart"""
-    response = requests.get(f"{BASE_URL}/carts/{cart_id}")
+    response = requests.get(f"{base_url}/carts/{cart_id}")
     assert response.status_code == 200
     cart = response.json()
     assert cart["id"] == cart_id
     validate_cart_data(cart)
 
 
-def test_create_cart():
+def test_create_cart(base_url):
     """Test creating a new cart"""
     new_cart = {
         "userId": 1,
         "date": "2020-03-02",
-        "products": [{"productId": 1, "quantity": 1}, {"productId": 2, "quantity": 2}],
+        "products": [{"productId": 1, "quantity": 1}, {"productId": 2, "quantity": 2}]
     }
-    response = requests.post(f"{BASE_URL}/carts", json=new_cart)
+    response = requests.post(f"{base_url}/carts", json=new_cart)
     assert response.status_code == 201
     cart = response.json()
     validate_cart_data(cart)
@@ -52,23 +50,23 @@ def test_create_cart():
     assert len(cart["products"]) == len(new_cart["products"])
 
 
-def test_update_cart():
+def test_update_cart(base_url):
     """Test updating an existing cart"""
     cart_id = 1
     update_data = {
         "userId": 1,
         "date": "2020-03-02",
-        "products": [{"productId": 1, "quantity": 5}],
+        "products": [{"productId": 1, "quantity": 5}]
     }
-    response = requests.put(f"{BASE_URL}/carts/{cart_id}", json=update_data)
+    response = requests.put(f"{base_url}/carts/{cart_id}", json=update_data)
     assert response.status_code == 200
     cart = response.json()
     validate_cart_data(cart)
     assert cart["id"] == cart_id
 
 
-def test_delete_cart():
+def test_delete_cart(base_url):
     """Test deleting a cart"""
     cart_id = 1
-    response = requests.delete(f"{BASE_URL}/carts/{cart_id}")
+    response = requests.delete(f"{base_url}/carts/{cart_id}")
     assert response.status_code == 200

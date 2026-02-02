@@ -1,8 +1,6 @@
 import pytest
 import requests
 
-BASE_URL = "https://fakestoreapi.com"
-
 
 def validate_user_data(user):
     """Helper function to validate user data types and required fields"""
@@ -17,9 +15,9 @@ def validate_user_data(user):
     assert isinstance(user["address"], dict)
 
 
-def test_get_all_users():
+def test_get_all_users(base_url):
     """Test retrieving all users from Fake Store API"""
-    response = requests.get(f"{BASE_URL}/users")
+    response = requests.get(f"{base_url}/users")
     assert response.status_code == 200
     users = response.json()
     assert isinstance(users, list)
@@ -30,16 +28,16 @@ def test_get_all_users():
 
 
 @pytest.mark.parametrize("user_id", [1, 2, 3, 5])
-def test_get_single_user(user_id):
+def test_get_single_user(base_url, user_id):
     """Test retrieving a single user"""
-    response = requests.get(f"{BASE_URL}/users/{user_id}")
+    response = requests.get(f"{base_url}/users/{user_id}")
     assert response.status_code == 200
     user = response.json()
     assert user["id"] == user_id
     validate_user_data(user)
 
 
-def test_create_user():
+def test_create_user(base_url):
     """Test creating a new user"""
     new_user = {
         "email": "test@example.com",
@@ -51,18 +49,18 @@ def test_create_user():
             "street": "Test Street",
             "number": 1,
             "zipcode": "12345",
-            "geolocation": {"lat": "0", "long": "0"},
+            "geolocation": {"lat": "0", "long": "0"}
         },
-        "phone": "123-456-7890",
+        "phone": "123-456-7890"
     }
-    response = requests.post(f"{BASE_URL}/users", json=new_user)
+    response = requests.post(f"{base_url}/users", json=new_user)
     assert response.status_code == 201
     user = response.json()
     assert "id" in user
     assert isinstance(user["id"], int)
 
 
-def test_update_user():
+def test_update_user(base_url):
     """Test updating an existing user"""
     user_id = 1
     update_data = {
@@ -75,19 +73,19 @@ def test_update_user():
             "street": "Updated Street",
             "number": 2,
             "zipcode": "54321",
-            "geolocation": {"lat": "1", "long": "1"},
+            "geolocation": {"lat": "1", "long": "1"}
         },
-        "phone": "987-654-3210",
+        "phone": "987-654-3210"
     }
-    response = requests.put(f"{BASE_URL}/users/{user_id}", json=update_data)
+    response = requests.put(f"{base_url}/users/{user_id}", json=update_data)
     assert response.status_code == 200
     user = response.json()
     assert user["email"] == update_data["email"]
     assert user["username"] == update_data["username"]
 
 
-def test_delete_user():
+def test_delete_user(base_url):
     """Test deleting a user"""
     user_id = 1
-    response = requests.delete(f"{BASE_URL}/users/{user_id}")
+    response = requests.delete(f"{base_url}/users/{user_id}")
     assert response.status_code == 200

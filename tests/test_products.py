@@ -1,8 +1,6 @@
 import pytest
 import requests
 
-BASE_URL = "https://fakestoreapi.com"
-
 
 def validate_product_data(product):
     """Helper function to validate product data types and required fields"""
@@ -15,9 +13,9 @@ def validate_product_data(product):
         assert isinstance(product["description"], str)
 
 
-def test_get_all_products():
+def test_get_all_products(base_url):
     """Test retrieving all products from Fake Store API"""
-    response = requests.get(f"{BASE_URL}/products")
+    response = requests.get(f"{base_url}/products")
     assert response.status_code == 200
     products = response.json()
     assert isinstance(products, list)
@@ -31,8 +29,8 @@ def test_get_all_products():
         validate_product_data(product)
 
 
-def test_get_all_products_not_empty():
-    response = requests.get(f"{BASE_URL}/products")
+def test_get_all_products_not_empty(base_url):
+    response = requests.get(f"{base_url}/products")
     products = response.json()
 
     assert len(products) > 0
@@ -40,9 +38,9 @@ def test_get_all_products_not_empty():
 
 
 @pytest.mark.parametrize("product_id", [1, 2, 3, 5, 10])
-def test_get_single_product(product_id):
+def test_get_single_product(base_url, product_id):
     """Test retrieving a single product"""
-    response = requests.get(f"{BASE_URL}/products/{product_id}")
+    response = requests.get(f"{base_url}/products/{product_id}")
     assert response.status_code == 200
     product = response.json()
     assert product["id"] == product_id
@@ -53,9 +51,9 @@ def test_get_single_product(product_id):
     validate_product_data(product)
 
 
-def test_get_product_categories():
+def test_get_product_categories(base_url):
     """Test retrieving product categories"""
-    response = requests.get(f"{BASE_URL}/products/categories")
+    response = requests.get(f"{base_url}/products/categories")
     assert response.status_code == 200
     categories = response.json()
     assert isinstance(categories, list)
@@ -65,9 +63,9 @@ def test_get_product_categories():
 @pytest.mark.parametrize(
     "category", ["electronics", "jewelery", "men's clothing", "women's clothing"]
 )
-def test_get_products_by_category(category):
+def test_get_products_by_category(base_url, category):
     """Test retrieving products by category"""
-    response = requests.get(f"{BASE_URL}/products/category/{category}")
+    response = requests.get(f"{base_url}/products/category/{category}")
     assert response.status_code == 200
     products = response.json()
     assert isinstance(products, list)
@@ -77,16 +75,16 @@ def test_get_products_by_category(category):
         validate_product_data(product)
 
 
-def test_last_product_in_each_category():
+def test_last_product_in_each_category(base_url):
     """Test that the last product in each category has the correct category"""
     # Get all categories
-    response = requests.get(f"{BASE_URL}/products/categories")
+    response = requests.get(f"{base_url}/products/categories")
     assert response.status_code == 200
     categories = response.json()
 
     # For each category, get products and check the last one
     for category in categories:
-        response = requests.get(f"{BASE_URL}/products/category/{category}")
+        response = requests.get(f"{base_url}/products/category/{category}")
         assert response.status_code == 200
         products = response.json()
         assert isinstance(products, list)
@@ -100,8 +98,8 @@ def test_last_product_in_each_category():
 
 
 @pytest.mark.parametrize("product_id", [9999, 0, -1])
-def test_nonexistent_product(product_id):
-    response = requests.get(f"{BASE_URL}/products/{product_id}")
+def test_nonexistent_product(base_url, product_id):
+    response = requests.get(f"{base_url}/products/{product_id}")
     assert (
         response.status_code == 200
     )  # Fake Store API always returns 200 for these IDs
