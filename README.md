@@ -2,6 +2,10 @@
 
 This project contains automated tests for the FakeStore API (https://fakestoreapi.com/) using Python, requests, and pytest. It covers comprehensive testing of products, carts, and users endpoints with full CRUD operations where applicable.
 
+## CI/CD
+
+Tests are automatically run on every push and pull request via GitHub Actions.
+
 ## Setup
 
 1. Create a virtual environment:
@@ -35,6 +39,7 @@ pytest -m regression # Comprehensive tests (29 tests)
 
 ## Project Structure
 
+- `.github/workflows/api-tests.yml`: GitHub Actions workflow for CI/CD
 - `tests/test_products.py`: Test cases for product-related API endpoints (13 tests) - Read operations with parametrization and data validation
 - `tests/test_carts.py`: Test cases for cart-related API endpoints (8 tests) - Full CRUD operations
 - `tests/test_users.py`: Test cases for user-related API endpoints (8 tests) - Full CRUD operations
