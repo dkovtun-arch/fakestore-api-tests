@@ -38,9 +38,9 @@ pytest -m regression # Comprehensive tests (29 tests)
 - `tests/test_products.py`: Test cases for product-related API endpoints (13 tests) - Read operations with parametrization and data validation
 - `tests/test_carts.py`: Test cases for cart-related API endpoints (8 tests) - Full CRUD operations
 - `tests/test_users.py`: Test cases for user-related API endpoints (8 tests) - Full CRUD operations
-- `tests/conftest.py`: Pytest configuration with fixtures (base_url fixture for API endpoint)
+- `tests/conftest.py`: Pytest configuration with fixtures and JSON schema validation
 - `pytest.ini`: Pytest configuration file with markers and settings
-- `requirements.txt`: Python dependencies
+- `requirements.txt`: Python dependencies (requests, pytest, jsonschema)
 
 ## Test Coverage
 
