@@ -13,6 +13,7 @@ def validate_cart_data(cart):
         assert isinstance(item["quantity"], int)
 
 
+@pytest.mark.smoke
 def test_get_all_carts(base_url):
     """Test retrieving all carts from Fake Store API"""
     response = requests.get(f"{base_url}/carts")
@@ -25,6 +26,8 @@ def test_get_all_carts(base_url):
         validate_cart_data(cart)
 
 
+@pytest.mark.smoke
+@pytest.mark.regression
 @pytest.mark.parametrize("cart_id", [1, 2, 3, 5])
 def test_get_single_cart(base_url, cart_id):
     """Test retrieving a single cart"""
@@ -35,12 +38,13 @@ def test_get_single_cart(base_url, cart_id):
     validate_cart_data(cart)
 
 
+@pytest.mark.regression
 def test_create_cart(base_url):
     """Test creating a new cart"""
     new_cart = {
         "userId": 1,
         "date": "2020-03-02",
-        "products": [{"productId": 1, "quantity": 1}, {"productId": 2, "quantity": 2}]
+        "products": [{"productId": 1, "quantity": 1}, {"productId": 2, "quantity": 2}],
     }
     response = requests.post(f"{base_url}/carts", json=new_cart)
     assert response.status_code == 201
@@ -50,13 +54,14 @@ def test_create_cart(base_url):
     assert len(cart["products"]) == len(new_cart["products"])
 
 
+@pytest.mark.regression
 def test_update_cart(base_url):
     """Test updating an existing cart"""
     cart_id = 1
     update_data = {
         "userId": 1,
         "date": "2020-03-02",
-        "products": [{"productId": 1, "quantity": 5}]
+        "products": [{"productId": 1, "quantity": 5}],
     }
     response = requests.put(f"{base_url}/carts/{cart_id}", json=update_data)
     assert response.status_code == 200
@@ -65,6 +70,7 @@ def test_update_cart(base_url):
     assert cart["id"] == cart_id
 
 
+@pytest.mark.regression
 def test_delete_cart(base_url):
     """Test deleting a cart"""
     cart_id = 1

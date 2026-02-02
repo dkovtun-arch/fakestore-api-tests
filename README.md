@@ -27,6 +27,12 @@ Run the tests with pytest:
 pytest
 ```
 
+Run specific test suites:
+```bash
+pytest -m smoke      # Basic functionality tests (17 tests)
+pytest -m regression # Comprehensive tests (29 tests)
+```
+
 ## Project Structure
 
 - `tests/test_products.py`: Test cases for product-related API endpoints (13 tests) - Read operations with parametrization and data validation

@@ -13,6 +13,8 @@ def validate_product_data(product):
         assert isinstance(product["description"], str)
 
 
+@pytest.mark.smoke
+@pytest.mark.regression
 def test_get_all_products(base_url):
     """Test retrieving all products from Fake Store API"""
     response = requests.get(f"{base_url}/products")
@@ -29,6 +31,7 @@ def test_get_all_products(base_url):
         validate_product_data(product)
 
 
+@pytest.mark.regression
 def test_get_all_products_not_empty(base_url):
     response = requests.get(f"{base_url}/products")
     products = response.json()
@@ -37,6 +40,8 @@ def test_get_all_products_not_empty(base_url):
     assert products[-1]["id"] is not None
 
 
+@pytest.mark.smoke
+@pytest.mark.regression
 @pytest.mark.parametrize("product_id", [1, 2, 3, 5, 10])
 def test_get_single_product(base_url, product_id):
     """Test retrieving a single product"""
@@ -51,6 +56,7 @@ def test_get_single_product(base_url, product_id):
     validate_product_data(product)
 
 
+@pytest.mark.smoke
 def test_get_product_categories(base_url):
     """Test retrieving product categories"""
     response = requests.get(f"{base_url}/products/categories")
@@ -60,6 +66,7 @@ def test_get_product_categories(base_url):
     assert len(categories) > 0
 
 
+@pytest.mark.regression
 @pytest.mark.parametrize(
     "category", ["electronics", "jewelery", "men's clothing", "women's clothing"]
 )
@@ -75,6 +82,7 @@ def test_get_products_by_category(base_url, category):
         validate_product_data(product)
 
 
+@pytest.mark.regression
 def test_last_product_in_each_category(base_url):
     """Test that the last product in each category has the correct category"""
     # Get all categories
@@ -97,6 +105,7 @@ def test_last_product_in_each_category(base_url):
             validate_product_data(last_product)
 
 
+@pytest.mark.regression
 @pytest.mark.parametrize("product_id", [9999, 0, -1])
 def test_nonexistent_product(base_url, product_id):
     response = requests.get(f"{base_url}/products/{product_id}")

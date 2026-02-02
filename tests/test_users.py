@@ -15,6 +15,7 @@ def validate_user_data(user):
     assert isinstance(user["address"], dict)
 
 
+@pytest.mark.smoke
 def test_get_all_users(base_url):
     """Test retrieving all users from Fake Store API"""
     response = requests.get(f"{base_url}/users")
@@ -27,6 +28,8 @@ def test_get_all_users(base_url):
         validate_user_data(user)
 
 
+@pytest.mark.smoke
+@pytest.mark.regression
 @pytest.mark.parametrize("user_id", [1, 2, 3, 5])
 def test_get_single_user(base_url, user_id):
     """Test retrieving a single user"""
@@ -37,6 +40,7 @@ def test_get_single_user(base_url, user_id):
     validate_user_data(user)
 
 
+@pytest.mark.regression
 def test_create_user(base_url):
     """Test creating a new user"""
     new_user = {
@@ -49,9 +53,9 @@ def test_create_user(base_url):
             "street": "Test Street",
             "number": 1,
             "zipcode": "12345",
-            "geolocation": {"lat": "0", "long": "0"}
+            "geolocation": {"lat": "0", "long": "0"},
         },
-        "phone": "123-456-7890"
+        "phone": "123-456-7890",
     }
     response = requests.post(f"{base_url}/users", json=new_user)
     assert response.status_code == 201
@@ -60,6 +64,7 @@ def test_create_user(base_url):
     assert isinstance(user["id"], int)
 
 
+@pytest.mark.regression
 def test_update_user(base_url):
     """Test updating an existing user"""
     user_id = 1
@@ -73,9 +78,9 @@ def test_update_user(base_url):
             "street": "Updated Street",
             "number": 2,
             "zipcode": "54321",
-            "geolocation": {"lat": "1", "long": "1"}
+            "geolocation": {"lat": "1", "long": "1"},
         },
-        "phone": "987-654-3210"
+        "phone": "987-654-3210",
     }
     response = requests.put(f"{base_url}/users/{user_id}", json=update_data)
     assert response.status_code == 200
@@ -84,6 +89,7 @@ def test_update_user(base_url):
     assert user["username"] == update_data["username"]
 
 
+@pytest.mark.regression
 def test_delete_user(base_url):
     """Test deleting a user"""
     user_id = 1
