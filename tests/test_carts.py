@@ -1,0 +1,74 @@
+import pytest
+import requests
+
+BASE_URL = "https://fakestoreapi.com"
+
+
+def validate_cart_data(cart):
+    """Helper function to validate cart data types and required fields"""
+    assert isinstance(cart["id"], int)
+    assert isinstance(cart["userId"], int)
+    assert "date" in cart
+    assert isinstance(cart["products"], list)
+    for item in cart["products"]:
+        assert isinstance(item["productId"], int)
+        assert isinstance(item["quantity"], int)
+
+
+def test_get_all_carts():
+    """Test retrieving all carts from Fake Store API"""
+    response = requests.get(f"{BASE_URL}/carts")
+    assert response.status_code == 200
+    carts = response.json()
+    assert isinstance(carts, list)
+    assert len(carts) > 0
+    # Check first 3 carts
+    for cart in carts[:3]:
+        validate_cart_data(cart)
+
+
+@pytest.mark.parametrize("cart_id", [1, 2, 3, 5])
+def test_get_single_cart(cart_id):
+    """Test retrieving a single cart"""
+    response = requests.get(f"{BASE_URL}/carts/{cart_id}")
+    assert response.status_code == 200
+    cart = response.json()
+    assert cart["id"] == cart_id
+    validate_cart_data(cart)
+
+
+def test_create_cart():
+    """Test creating a new cart"""
+    new_cart = {
+        "userId": 1,
+        "date": "2020-03-02",
+        "products": [{"productId": 1, "quantity": 1}, {"productId": 2, "quantity": 2}],
+    }
+    response = requests.post(f"{BASE_URL}/carts", json=new_cart)
+    assert response.status_code == 201
+    cart = response.json()
+    validate_cart_data(cart)
+    assert cart["userId"] == new_cart["userId"]
+    assert len(cart["products"]) == len(new_cart["products"])
+
+
+def test_update_cart():
+    """Test updating an existing cart"""
+    cart_id = 1
+    update_data = {
+        "userId": 1,
+        "date": "2020-03-02",
+        "products": [{"productId": 1, "quantity": 5}],
+    }
+    response = requests.put(f"{BASE_URL}/carts/{cart_id}", json=update_data)
+    assert response.status_code == 200
+    cart = response.json()
+    validate_cart_data(cart)
+    assert cart["id"] == cart_id
+
+
+def test_delete_cart():
+    """Test deleting a cart"""
+    cart_id = 1
+    response = requests.delete(f"{BASE_URL}/carts/{cart_id}")
+    assert response.status_code == 200
