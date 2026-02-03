@@ -1,6 +1,6 @@
+import allure
 import pytest
 import requests
-import allure
 
 
 def validate_user_data(user):

@@ -27,9 +27,15 @@ jobs:
       run: |
         pytest --tb=short --html=report.html --self-contained-html
 
+    - name: Wait before smoke tests
+      run: sleep 5
+
     - name: Run smoke tests
       run: |
         pytest -m smoke --tb=short --html=smoke-report.html --self-contained-html --alluredir=allure-results-smoke
+
+    - name: Wait before regression tests
+      run: sleep 5
 
     - name: Run regression tests
       run: |

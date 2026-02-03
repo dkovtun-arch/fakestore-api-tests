@@ -3,3 +3,4 @@ pytest
 jsonschema
 pytest-html
 allure-pytest
+pytest-rerunfailures

@@ -8,6 +8,11 @@ venv/
 .venv/
 pip-log.txt
 pip-delete-this-directory.txt
+allure-results*/
+allure-report*/
+report.html
+smoke-report.html
+regression-report.html
 .tox/
 .coverage
 .coverage.*
