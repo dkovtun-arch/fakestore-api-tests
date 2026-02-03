@@ -130,7 +130,9 @@ def test_nonexistent_product(base_url, product_id):
 
     if response.text:
         product = response.json()
-        assert product["id"] != product_id  # Ensure the product does not exist
+        assert (
+            "id" not in product or product["id"] != product_id
+        )  # Ensure the product does not exist
     else:
         # If response is empty, consider it as non-existent product
         assert True
