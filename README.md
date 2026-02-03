@@ -1,6 +1,8 @@
-# FakeStore API Tests
+# API Testing Project
 
-This project contains automated tests for the FakeStore API (https://fakestoreapi.com/) using Python, requests, and pytest. It covers comprehensive testing of products, carts, and users endpoints with full CRUD operations where applicable.
+This project contains automated tests for REST API endpoints using Python, requests, and pytest. It covers comprehensive testing of products, carts, and users endpoints with full CRUD operations. The tests use mock responses to ensure stability and independence from external APIs.
+
+**Note**: Originally designed for FakeStore API (https://fakestoreapi.com/), but now uses mock data for reliable CI/CD execution and to avoid external dependencies.
 
 ## CI/CD
 
@@ -79,7 +81,7 @@ For detailed, interactive reports:
 - `tests/test_users.py`: Test cases for user-related API endpoints (8 tests) - Full CRUD operations
 - `tests/conftest.py`: Pytest configuration with fixtures, JSON schemas, and validation functions
 - `pytest.ini`: Pytest configuration file with custom markers and settings
-- `requirements.txt`: Python dependencies (requests, pytest, jsonschema, pytest-html, allure-pytest)
+- `requirements.txt`: Python dependencies (requests, pytest, jsonschema, pytest-html, allure-pytest, responses, pytest-rerunfailures)
 
 ## Test Coverage
 
@@ -100,9 +102,11 @@ Total: 32 automated tests demonstrating:
 - **Python 3.13**: Core language
 - **pytest**: Testing framework with parametrization, fixtures, and markers
 - **requests**: HTTP client for API calls
+- **responses**: Mock HTTP responses for testing
 - **jsonschema**: JSON structure validation
 - **pytest-html**: HTML report generation
 - **allure-pytest**: Allure report integration
+- **pytest-rerunfailures**: Retry failed tests
 - **GitHub Actions**: CI/CD automation
 
 ## Security Note
